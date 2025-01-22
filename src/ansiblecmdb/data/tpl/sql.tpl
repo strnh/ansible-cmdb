@@ -2,7 +2,7 @@
 from jsonxs import jsonxs
 %>
 <%def name="col_id(host)"><%
-  return jsonxs(host, 'ansile_machine_id', default='')
+  return jsonxs(host, 'ansible_machine_id', default='')
 %></%def>
 <%def name="col_fqdn(host)"><%
   return jsonxs(host, 'ansible_facts.ansible_fqdn', default='')
