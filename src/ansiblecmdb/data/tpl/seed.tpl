@@ -83,40 +83,41 @@ from jsonxs import jsonxs
   endfor
   return 0
 %></%def>
-# This file should ensure the existence of records required to run the application in every environment (production,
-# development, test). The code here should be idempotent so that it can be executed at any point in every environment.
-# The data can then be loaded with the bin/rails db:seed command (or created alongside the database with db:setup).
-#
-# Example:
-#
-#   ["Action", "Comedy", "Drama", "Horror"].each do |genre_name|
-#     MovieGenre.find_or_create_by!(name: genre_name)
-#   end
-#   
+    # This file should ensure the existence of records required to run the application in every environment (production,
+    # development, test). The code here should be idempotent so that it can be executed at any point in every environment.
+    # The data can then be loaded with the bin/rails db:seed command (or created alongside the database with db:setup).
+    #
+    # Example:
+    #
+    #   ["Action", "Comedy", "Drama", "Horror"].each do |genre_name|
+    #     MovieGenre.find_or_create_by!(name: genre_name)
+    #   end
+    #   
 
-% for svr model :
-    Svr.create!(
-        id: ${col_id(host)},
-        name: "${jsonxs(host, 'name', default='Unknown')}",
-        fqdn: "${col_fqdn(host)}",
-        main_ip: "${col_main_ip(host)}",
-        os_name:  "${col_os_name(host)}",
-        os_version: "${col_os_version(host)}",
-        system_type: "${col_system_type(host)}",
-        kernel: "${col_kernel(host)}",
-        arch_hardware: "${col_arch_hardware(host)}",
-        arch_userspace: "${col_arch_userspace(host)}",
-        virt_type: "${col_virt_type(host)}",
-        virt_role: "${col_vrrt_role(host)}",
-        cpu_type: "${col_cpu_type(host)}",
-        vcpus: ${col_vcpu(host)},
-        ram: ${col_ram(host)},
-        disk_total: ${col_disk_total(host)},
-        disk_free: ${col_disk_free(host)} 
-        todo: "nothing",
-        nagios: "",
-        nagios_id: "${jsonxs(host, 'name', default=${col_fqdn(host)})}",
-        pending: false,
-        pkg: false 
-    )
+    # for svr model :
+% for hostname, host in sorted(hosts.items()):
+Svr.create!(
+    id: ${col_id(host)},
+    name: "${jsonxs(host, 'name', default='Unknown')}",
+    fqdn: "${col_fqdn(host)}",
+    main_ip: "${col_main_ip(host)}",
+    os_name:  "${col_os_name(host)}",
+    os_version: "${col_os_version(host)}",
+    system_type: "${col_system_type(host)}",
+    kernel: "${col_kernel(host)}",
+    arch_hardware: "${col_arch_hardware(host)}",
+    arch_userspace: "${col_arch_userspace(host)}",
+    virt_type: "${col_virt_type(host)}",
+    virt_role: "${col_virt_role(host)}",
+    cpu_type: "${col_cpu_type(host)}",
+    vcpus: ${col_vcpus(host)},
+    ram: ${col_ram(host)},
+    disk_total: ${col_disk_total(host)},
+    disk_free: ${col_disk_free(host)} 
+    todo: "nothing",
+    nagios: "",
+    nagios_id: "${jsonxs(host, 'name', default="Unknown")}",
+    pending: false,
+    pkg: false 
+ )
 %endfor
