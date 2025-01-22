@@ -1,11 +1,11 @@
 <%
 from jsonxs import jsonxs
 %>
-<%def name="col_id(host)"><%
-  return jsonxs(host, 'ansible_machine_id', default='')
-%></%def>
 <%def name="col_fqdn(host)"><%
   return jsonxs(host, 'ansible_facts.ansible_fqdn', default='')
+%></%def>
+<%def name="col_id(host)"><%
+  return  int(jsonxs(host, 'ansible_facts.ansible_machine_id', default=''),base=16)
 %></%def>
 <%def name="col_main_ip(host)"><%
   default_ipv4 = ''
@@ -85,6 +85,7 @@ from jsonxs import jsonxs
 %></%def>
 DROP TABLE IF EXISTS hosts;
 CREATE TABLE hosts (
+    id int,
     name VARCHAR(255),
     fqdn VARCHAR(255),
     main_ip VARCHAR(15),
@@ -123,7 +124,7 @@ CREATE TABLE hosts (
         disk_total,
         disk_free
     ) VALUES (
-        '${col_id(host)},
+        '${col_id(host)}',
         '${jsonxs(host, 'name', default='Unknown')}',
         '${col_fqdn(host)}',
         '${col_main_ip(host)}',
