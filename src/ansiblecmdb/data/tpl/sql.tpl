@@ -85,7 +85,7 @@ from jsonxs import jsonxs
 %></%def>
 DROP TABLE IF EXISTS hosts;
 CREATE TABLE hosts (
-    id int,
+    id numeric unique,
     name VARCHAR(255),
     fqdn VARCHAR(255),
     main_ip VARCHAR(15),
