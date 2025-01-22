@@ -1,6 +1,9 @@
 <%
 from jsonxs import jsonxs
 %>
+<%def name="col_id(host)"><%
+  return jsonxs(host, 'ansile_machine_id', default='')
+%></%def>
 <%def name="col_fqdn(host)"><%
   return jsonxs(host, 'ansible_facts.ansible_fqdn', default='')
 %></%def>
@@ -93,7 +96,7 @@ CREATE TABLE hosts (
     arch_userspace VARCHAR(12),
     virt_type VARCHAR(20),
     virt_role VARCHAR(20),
-    cpu_type VARCHAR(60),
+    cpu_type VARCHAR(255),
     vcpus INT,
     ram FLOAT,
     disk_total FLOAT,
@@ -102,6 +105,7 @@ CREATE TABLE hosts (
 
 % for hostname, host in sorted(hosts.items()):
     INSERT INTO hosts (
+        id,
         name,
         fqdn,
         main_ip,
@@ -119,18 +123,19 @@ CREATE TABLE hosts (
         disk_total,
         disk_free
     ) VALUES (
-        "${jsonxs(host, 'name', default='Unknown')}",
-        "${col_fqdn(host)}",
-        "${col_main_ip(host)}",
-        "${col_os_name(host)}",
-        "${col_os_version(host)}",
-        "${col_system_type(host)}",
-        "${col_kernel(host)}",
-        "${col_arch_hardware(host)}",
-        "${col_arch_userspace(host)}",
-        "${col_virt_type(host)}",
-        "${col_virt_role(host)}",
-        "${col_cpu_type(host)}",
+        '${col_id(host)},
+        '${jsonxs(host, 'name', default='Unknown')}',
+        '${col_fqdn(host)}',
+        '${col_main_ip(host)}',
+        '${col_os_name(host)}',
+        '${col_os_version(host)}',
+        '${col_system_type(host)}',
+        '${col_kernel(host)}',
+        '${col_arch_hardware(host)}',
+        '${col_arch_userspace(host)}',
+        '${col_virt_type(host)}',
+        '${col_virt_role(host)}',
+        '${col_cpu_type(host)}',
         ${col_vcpus(host)},
         ${col_ram(host)},
         ${col_disk_total(host)},
