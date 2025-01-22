@@ -113,7 +113,7 @@ Svr.create!(
     vcpus: ${col_vcpus(host)},
     ram: ${col_ram(host)},
     disk_total: ${col_disk_total(host)},
-    disk_free: ${col_disk_free(host)} 
+    disk_free: ${col_disk_free(host)},
     todo: "nothing",
     nagios: "",
     nagios_id: "${jsonxs(host, 'name', default="Unknown")}",
