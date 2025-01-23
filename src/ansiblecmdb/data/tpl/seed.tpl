@@ -14,7 +14,13 @@ from jsonxs import jsonxs
     if ipv4_addresses:
       default_ipv4 = ipv4_addresses[0]
   else:
-    default_ipv4 = jsonxs(host, 'ansible_facts.ansible_default_ipv4.address', default='')
+    default_ipv4_fact = jsonxs(host, 'ansible_facts.ansible_default_ipv4.address', default='')
+    if default_ipv4_fact:
+      default_ipv4 = default_ipv4_fact[0]
+    else: 
+      all_ipv4_addresses = [ip4 for ip4 in jsonxs(host, 'ansible_facts.ansible_all_ipv4_addresses', default=[]) if ':' not in ip4] 
+      if all_ipv4_addresses:
+        default_ipv4 = all_ipv4_addresses[0]
   
   return default_ipv4.strip()
 %></%def>
@@ -113,7 +119,7 @@ Svr.create!(
     vcpus: ${col_vcpus(host)},
     ram: ${col_ram(host)},
     disk_total: ${col_disk_total(host)},
-    disk_free: ${col_disk_free(host)},
+    disk_free: ${col_disk_free(host)}, 
     todo: "nothing",
     nagios: "",
     nagios_id: "${jsonxs(host, 'name', default="Unknown")}",
