@@ -8,21 +8,21 @@ from jsonxs import jsonxs
   return  int(jsonxs(host, 'ansible_facts.ansible_machine_id', default='-1'),base=16)
 %></%def>
 <%def name="col_main_ip(host)"><%
-  default_ipv4 = ''
+  default_ipv4_fact = ''
   if jsonxs(host, 'ansible_facts.ansible_os_family', default='') == 'Windows':
     ipv4_addresses = [ip for ip in jsonxs(host, 'ansible_facts.ansible_ip_addresses', default=[]) if ':' not in ip]
     if ipv4_addresses:
-      default_ipv4 = ipv4_addresses[0]
+      default_ipv4_fact = ipv4_addresses[0]
   else:
-    default_ipv4_fact = jsonxs(host, 'ansible_facts.ansible_default_ipv4.address', default='')
-    if default_ipv4_fact:
-      default_ipv4 = default_ipv4_fact[0]
-    else: 
-      all_ipv4_addresses = [ip4 for ip4 in jsonxs(host, 'ansible_facts.ansible_all_ipv4_addresses', default=[]) if ':' not in ip4] 
+    default_ipv4 = jsonxs(host, 'ansible_facts.ansible_default_ipv4.address', default='')
+    if default_ipv4:
+      default_ipv4_fact = default_ipv4        
+    else:
+      all_ipv4_addresses = jsonxs(host, 'ansible_facts.ansible_all_ipv4_addresses[0]',default='N/A')
       if all_ipv4_addresses:
-        default_ipv4 = all_ipv4_addresses[0]
-  
-  return default_ipv4.strip()
+        default_ipv4_fact = all_ipv4_addresses
+
+  return default_ipv4_fact.strip()
 %></%def>
 <%def name="col_os_name(host)"><%
   return jsonxs(host, 'ansible_facts.ansible_distribution', default='')
