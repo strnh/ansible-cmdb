@@ -53,7 +53,7 @@ from jsonxs import jsonxs
   return jsonxs(host, 'ansible_facts.ansible_virtualization_role', default='?')
 %></%def>
 <%def name="col_cpu_type(host)"><%
-  cpu_type = jsonxs(host, 'ansible_facts.ansible_processor', default=0)[0:60]
+  cpu_type = jsonxs(host, 'ansible_facts.ansible_processor', default="")[0:60]
   if isinstance(cpu_type, list) and len(cpu_type) > 0:
     return cpu_type[-1]
   else:
